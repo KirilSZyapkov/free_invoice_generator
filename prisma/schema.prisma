@@ -25,7 +25,8 @@ model User {
 
 model Invoice {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String   @db.ObjectId
+  userId      String
+  author      User     @relation(fields:[userId], references: [clerkId])     
   from        String
   invoiceNumber Float
   clientName  String
