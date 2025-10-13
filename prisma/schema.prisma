@@ -10,6 +10,49 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId    String    @unique
+  email      String    @unique
+  name       String?
+  invoices   Invoice[]
+  createdAt  DateTime  @default(now())
+}
+
+model Invoice {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  from        String
+  invoiceNumber Float
+  clientName  String
+  data        String
+  paymentTerms String
+  dueDate     DateTime
+  PoNumber    String
+  description String
+  quantity    Float
+  rate        Float
+  total       Float
+  notes       String?
+  discount    Float?
+  tax         Float?
+  shipping    Float?
+  terms       String?
+}
+
+model Item {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  price    Float
+  quantity Int
+}
+
+enum InvoiceStatus {
+  PENDING
+  PAID
+  CANCELLED
 }
