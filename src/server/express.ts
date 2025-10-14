@@ -32,7 +32,7 @@ app.prepare().then(() => {
     res.status(200).json({ message: "Hello from the API!" });
   });
 
-  // server.all("*", (req, res) => handle(req, res));
+  server.use((req, res) => handle(req, res));
 
   const PORT = process.env.PORT || 3030;
 
