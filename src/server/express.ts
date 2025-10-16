@@ -5,6 +5,10 @@ import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
 
+import * as trpcExpress from "@trpc/server/adapters/express";
+import { appRouter } from "../server/trpc/appRouter";
+import { createContext } from "../server/trpc/context";
+
 dotenv.config();
 
 const dev = process.env.NODE_ENV !== "production";
@@ -24,6 +28,14 @@ app.prepare().then(() => {
   server.use(cors());
   server.use(express.json());
 
+  server.use(
+    "/api/trpc",
+    trpcExpress.createExpressMiddleware({
+      router: appRouter,
+      createContext
+    })
+  );
+
   server.get("/api/health", (req, res) => {
     res.status(200).json({ status: "ok", time: new Date().toISOString() });
   });
@@ -37,6 +49,7 @@ app.prepare().then(() => {
   const PORT = process.env.PORT || 3030;
 
   server.listen(PORT, () => {
+    console.log(`Visit http://localhost:3000/`);
     console.log(`Server is listening on port ${PORT}`);
 
   });
