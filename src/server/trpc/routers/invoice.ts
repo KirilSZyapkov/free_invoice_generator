@@ -2,11 +2,8 @@ import { z } from 'zod';
 import { router, publicProcedure } from '../router';
 
 export const invoiceRouter = router({
-  getAllInvoicesForUser: publicProcedure.query(async () => {
-    return [
-      { id: 1, customer: "Иван Иванов", total: 120.5 },
-      { id: 2, customer: "Петър Петров", total: 80.0 },
-    ]
+  getAllInvoicesForUser: publicProcedure.query(async ({ctx}) => {
+    return await ctx.prisma.invoice.findById(1); // Тук после ще вземем userId от сесията
   }),
   createNewInvoice: publicProcedure
     .input(
