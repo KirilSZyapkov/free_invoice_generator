@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { router, publicProcedure } from '../router';
+import {invoiceType} from "@/types/invoice";
 
 export const invoiceRouter = router({
   getAllInvoicesForUser: publicProcedure.query(async ({ctx}) => {
@@ -10,12 +10,7 @@ export const invoiceRouter = router({
     // await ctx.prisma.invoice.findById(1); // Тук после ще вземем userId от сесията
   }),
   createNewInvoice: publicProcedure
-    .input(
-      z.object({
-        customer: z.string().min(1),
-        total: z.number().min(1),
-      })
-    )
+    .input(invoiceType)
     .mutation(async ({ input }) => {
       // Тук после ще запишем в MongoDB чрез Prisma
       console.log("Creating invoice", input);

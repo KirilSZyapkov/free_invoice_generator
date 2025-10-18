@@ -15,38 +15,37 @@ datasource db {
 }
 
 model User {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  clerkId    String    @unique
-  email      String    @unique
-  name       String?
-  invoices   Invoice[]
-  createdAt  DateTime  @default(now())
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId   String    @unique
+  email     String    @unique
+  name      String?
+  invoices  Invoice[]
+  createdAt DateTime  @default(now())
 }
 
 model Invoice {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String
-  author      User     @relation(fields:[userId], references: [clerkId])     
-  from        String
-  invoiceNumber Float
-  clientName  String
-  data        String
-  paymentTerms String
-  dueDate     DateTime
-  PoNumber    String
-  description String
-  quantity    Float
-  rate        Float
-  total       Float
-  notes       String?
-  discount    Float?
-  tax         Float?
-  shipping    Float?
-  terms       String?
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String
+  author        User     @relation(fields: [userId], references: [clerkId])
+  from          String
+  invoiceNumber String
+  clientName    String
+  data          String
+  paymentTerms  String
+  dueDate       DateTime
+  PoNumber      String
+  description   String
+  quantity      String
+  rate          String
+  notes         String?
+  discount      String?
+  tax           String
+  shipping      String?
+  terms         String?
 }
 
 model Item {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
   name     String
   price    Float
   quantity Int

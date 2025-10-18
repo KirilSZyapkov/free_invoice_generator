@@ -14,7 +14,7 @@ const HomePage = () => {
       <ul>
         {invoices.data?.map((inv) => (
           <li key={inv.id}>
-            {inv.customer} — {inv.total} лв
+            {inv.customer} — {inv.id} лв
           </li>
         ))}
       </ul>
