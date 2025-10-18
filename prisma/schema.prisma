@@ -30,7 +30,7 @@ model Invoice {
   from          String
   invoiceNumber String
   clientName    String
-  data          String
+  date          String
   paymentTerms  String
   dueDate       DateTime
   PoNumber      String
