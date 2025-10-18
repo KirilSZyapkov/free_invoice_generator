@@ -12,28 +12,36 @@ export const invoiceRouter = router({
   createNewInvoice: publicProcedure
     .input(invoiceType)
     .mutation(async ({ ctx,input }) => {
-      const createdInvoice = await ctx.prisma.create({
-        data:{
-          userId: "test user",
-          from: input.from,
-          invoiceNumber: input.invoiceNumber,
-          clientName: input.clientName,
-          date: input.date,
-          paymentTerms: input.paymentTerms,
-          dueDate: input.dueDate,
-          PoNumber: input.PoNumber,
-          description: input.description,
-          quantity: input.quantity,
-          rate: input.rate,
-          notes: input.notes,
-          discount: input.discount,
-          tax: input.tax,
-          shipping: input.shipping,
-          terms: input.terms
-        }
-      })
-      console.log("Creating invoice", input);
-      return { success: true, createdInvoice };
+      console.log("📥 Incoming input:", input);
+      try {
+        const createdInvoice = await ctx.prisma.invoice.create({
+          data:{
+            userId: "test user",
+            from: input.from,
+            invoiceNumber: input.invoiceNumber,
+            clientName: input.clientName,
+            date: input.date,
+            paymentTerms: input.paymentTerms,
+            dueDate: input.dueDate,
+            PoNumber: input.PoNumber,
+            description: input.description,
+            quantity: input.quantity,
+            rate: input.rate,
+            notes: input.notes,
+            discount: input.discount,
+            tax: input.tax,
+            shipping: input.shipping,
+            terms: input.terms
+          }
+        });
+        console.log("Creating invoice", input);
+        return { success: true, createdInvoice };
+      } catch (e) {
+        console.error("❌ Prisma error:", e);
+        throw new Error("Failed to create invoice");
+      }
+
+
 
     }),
 });

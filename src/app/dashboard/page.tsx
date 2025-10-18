@@ -4,7 +4,7 @@ import { trpc } from "@/utils/trpc";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { invoiceType } from "@/types/invoice"; // <-- Тук е твоя schema
+import { invoiceFormType } from "@/types/invoiceForm"; // <-- Тук е твоя schema
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-type InvoiceFormValues = z.infer<typeof invoiceType>;
+type InvoiceFormValues = z.infer<typeof invoiceFormType>;
 
 const NewInvoiceForm = ()=> {
   const invoices = trpc.invoice.getAllInvoicesForUser.useQuery();
@@ -26,9 +26,8 @@ const NewInvoiceForm = ()=> {
   });
 
   const form = useForm<InvoiceFormValues>({
-    resolver: zodResolver(invoiceType),
+    resolver: zodResolver(invoiceFormType),
     defaultValues: {
-      userId: "",
       from: "",
       invoiceNumber: "",
       clientName: "",
@@ -48,8 +47,24 @@ const NewInvoiceForm = ()=> {
   });
 
   const onSubmit = (values: InvoiceFormValues) => {
-    console.log("Invoice form values:", values);
-    // TODO: tRPC мутация за createInvoice
+   createInvoice.mutate({
+     userId: "guest", //ще проверим има ли акаунт в Клърк и ще заменим с id
+     from: values.from,
+     invoiceNumber: values.invoiceNumber,
+     clientName: values.clientName,
+     date: values.date,
+     paymentTerms: values.paymentTerms,
+     dueDate: values.dueDate,
+     PoNumber: values.PoNumber,
+     description: values.description,
+     quantity: values.quantity,
+     rate: values.rate,
+     tax: values.tax,
+     notes: values.notes,
+     discount: values.discount,
+     shipping: values.shipping,
+     terms: values.terms,
+   })
   };
 
   return (
@@ -61,7 +76,6 @@ const NewInvoiceForm = ()=> {
           onSubmit={form.handleSubmit(onSubmit)}
           className="grid grid-cols-2 gap-4"
         >
-        
           <FormField
             control={form.control}
             name="from"
