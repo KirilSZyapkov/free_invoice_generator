@@ -34,7 +34,7 @@ const NewInvoiceForm = ()=> {
       date: "",
       paymentTerms: "",
       dueDate: "",
-      PoNumber: "",
+      poNumber: "",
       description: "",
       quantity: "",
       rate: "",
@@ -55,7 +55,7 @@ const NewInvoiceForm = ()=> {
      date: values.date,
      paymentTerms: values.paymentTerms,
      dueDate: values.dueDate,
-     PoNumber: values.PoNumber,
+     poNumber: values.poNumber,
      description: values.description,
      quantity: values.quantity,
      rate: values.rate,
@@ -162,7 +162,7 @@ const NewInvoiceForm = ()=> {
 
           <FormField
             control={form.control}
-            name="PoNumber"
+            name="poNumber"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>PO Number</FormLabel>

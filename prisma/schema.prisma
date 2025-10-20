@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -24,16 +23,16 @@ model User {
 }
 
 model Invoice {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
   userId        String
-  author        User     @relation(fields: [userId], references: [clerkId])
+  author        User    @relation(fields: [userId], references: [clerkId])
   from          String
   invoiceNumber String
   clientName    String
   date          String
   paymentTerms  String
-  dueDate       DateTime
-  PoNumber      String
+  dueDate       String
+  poNumber      String
   description   String
   quantity      String
   rate          String

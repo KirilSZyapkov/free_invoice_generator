@@ -1,8 +1,11 @@
 import {CreateExpressContextOptions} from '@trpc/server/adapters/express';
+// import {prisma} from "@/server/db/prisma";
 import {db} from "../prisma";
+
 
 // Тук ще добавим Clerk по-късно за auth
 export const createContext = ({req, res}: CreateExpressContextOptions)=>{
+
   return {req, res, prisma: db};
 };
 

@@ -7,7 +7,7 @@ export const invoiceFormType = z.object({
   date: z.string().min(1, "Data is required!"),
   paymentTerms: z.string().min(1, "Payment terms are required!"),
   dueDate: z.string().min(1, "Due data is required!"),
-  PoNumber: z.string().min(1, "PO Number is required!"),
+  poNumber: z.string().min(1, "PO Number is required!"),
   description: z.string().min(1, "Description is required!"),
   quantity: z.string().min(1, "Quantity is required!"),
   rate: z.string().min(1, "Rate is required!"),

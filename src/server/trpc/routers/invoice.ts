@@ -23,7 +23,7 @@ export const invoiceRouter = router({
             date: input.date,
             paymentTerms: input.paymentTerms,
             dueDate: input.dueDate,
-            PoNumber: input.PoNumber,
+            poNumber: input.poNumber,
             description: input.description,
             quantity: input.quantity,
             rate: input.rate,
