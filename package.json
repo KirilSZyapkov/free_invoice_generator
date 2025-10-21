@@ -11,6 +11,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@clerk/express": "^1.7.41",
     "@clerk/nextjs": "^6.33.2",
     "@hookform/resolvers": "^5.2.2",
     "@prisma/client": "^6.16.3",

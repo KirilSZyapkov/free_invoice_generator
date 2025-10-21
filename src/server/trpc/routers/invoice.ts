@@ -16,7 +16,7 @@ export const invoiceRouter = router({
       try {
         const createdInvoice = await ctx.prisma.invoice.create({
           data:{
-            userId: "test user",
+            userId: ctx.userId || "guest",
             from: input.from,
             invoiceNumber: input.invoiceNumber,
             clientName: input.clientName,

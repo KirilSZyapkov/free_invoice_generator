@@ -1,11 +1,13 @@
 "use client";
 
+import {useState} from "react";
 import { trpc } from "@/utils/trpc";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { invoiceFormType } from "@/types/invoiceForm"; // <-- Тук е твоя schema
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import {
   Form,
   FormControl,
@@ -20,9 +22,18 @@ import { Textarea } from "@/components/ui/textarea";
 type InvoiceFormValues = z.infer<typeof invoiceFormType>;
 
 const NewInvoiceForm = ()=> {
+  const [loading, setLoading] = useState(false);
   const invoices = trpc.invoice.getAllInvoicesForUser.useQuery();
   const createInvoice = trpc.invoice.createNewInvoice.useMutation({
-    onSuccess: () => invoices.refetch(),
+    onSuccess: () => {
+      toast.success("✅ Invoice created successfully!");
+      form.reset();
+    },
+    onError: (error)=>{
+      console.error("❌ Error creating invoice:", error);
+      toast.error("Something went wrong while creating the invoice.");
+    },
+    onSettled: ()=> setLoading(false)
   });
 
   const form = useForm<InvoiceFormValues>({
@@ -47,24 +58,27 @@ const NewInvoiceForm = ()=> {
   });
 
   const onSubmit = (values: InvoiceFormValues) => {
-   createInvoice.mutate({
-     userId: "guest", //ще проверим има ли акаунт в Клърк и ще заменим с id
-     from: values.from,
-     invoiceNumber: values.invoiceNumber,
-     clientName: values.clientName,
-     date: values.date,
-     paymentTerms: values.paymentTerms,
-     dueDate: values.dueDate,
-     poNumber: values.poNumber,
-     description: values.description,
-     quantity: values.quantity,
-     rate: values.rate,
-     tax: values.tax,
-     notes: values.notes,
-     discount: values.discount,
-     shipping: values.shipping,
-     terms: values.terms,
-   })
+    setLoading(true);
+
+     createInvoice.mutate({
+       userId: "guest", //ще проверим има ли акаунт в Клърк и ще заменим с id
+       from: values.from,
+       invoiceNumber: values.invoiceNumber,
+       clientName: values.clientName,
+       date: values.date,
+       paymentTerms: values.paymentTerms,
+       dueDate: values.dueDate,
+       poNumber: values.poNumber,
+       description: values.description,
+       quantity: values.quantity,
+       rate: values.rate,
+       tax: values.tax,
+       notes: values.notes,
+       discount: values.discount,
+       shipping: values.shipping,
+       terms: values.terms,
+     });
+
   };
 
   return (
@@ -273,7 +287,7 @@ const NewInvoiceForm = ()=> {
           />
 
           <div className="col-span-2 flex justify-end mt-6">
-            <Button type="submit">Create Invoice</Button>
+            <Button type="submit" disabled={loading}>{loading ? "Create Invoice" : "Creating"}</Button>
           </div>
         </form>
       </Form>
