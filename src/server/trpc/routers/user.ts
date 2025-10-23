@@ -13,5 +13,17 @@ export const userRouter = router({
       user: "User",
       id: userId
     }
-  })
+  }),
+  createNewUser: publicProcedure
+    .input()
+    .mutation(async ({ctx, input})=>{
+      try{
+
+      } catch (e: unknown) {
+        console.error("Prisma error", e);
+        if(e instanceof Error) {
+          throw new Error(`Faild to create new user: ${e.message}`)
+        }
+      }
+    })
 })
