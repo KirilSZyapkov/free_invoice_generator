@@ -18,11 +18,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {useUser} from "@clerk/nextjs";
 
 type InvoiceFormValues = z.infer<typeof invoiceFormType>;
 
 const NewInvoiceForm = ()=> {
   const [loading, setLoading] = useState(false);
+  const {user} = useUser();
+
+  console.log("dashboard 28", user?.id);
   const invoices = trpc.invoice.getAllInvoicesForUser.useQuery();
   const createInvoice = trpc.invoice.createNewInvoice.useMutation({
     onSuccess: () => {
@@ -61,7 +65,7 @@ const NewInvoiceForm = ()=> {
     setLoading(true);
 
      createInvoice.mutate({
-       userId: "guest", //ще проверим има ли акаунт в Клърк и ще заменим с id
+       userId: user?.id || "guest",
        from: values.from,
        invoiceNumber: values.invoiceNumber,
        clientName: values.clientName,

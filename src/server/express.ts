@@ -8,7 +8,7 @@ import path from "path";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { appRouter } from "../server/trpc/appRouter";
 import { createContext } from "../server/trpc/context";
-import {requireAuth} from "@clerk/express";
+import {clerkMiddleware,requireAuth} from "@clerk/express";
 
 dotenv.config();
 
@@ -28,10 +28,10 @@ app.prepare().then(() => {
 
   server.use(cors());
   server.use(express.json());
+  server.use(clerkMiddleware());
 
   server.use(
     "/api/trpc",
-    requireAuth(),
     trpcExpress.createExpressMiddleware({
       router: appRouter,
       createContext

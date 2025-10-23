@@ -6,7 +6,7 @@ import {getAuth} from "@clerk/express";
 // Тук ще добавим Clerk по-късно за auth
 export const createContext = ({req, res}: CreateExpressContextOptions)=>{
   const auth = getAuth(req);
-  const userId = auth.userId ?? null;
+  const userId = auth.userId;
   return {req, res, prisma: db, userId};
 };
 
