@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import { useState } from "react";
 import {ClerkProvider} from "@clerk/nextjs";
+import NavBar from "@/components/shared/NavBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,6 +45,8 @@ export default function RootLayout({
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
           >
             <QueryClientProvider client={queryClient}>
+              <NavBar/>
+
               {children}
               <Toaster/>
             </QueryClientProvider>

@@ -20,12 +20,13 @@ model User {
   name      String?
   invoices  Invoice[]
   createdAt DateTime  @default(now())
+  updatedAt DateTime?
 }
 
 model Invoice {
-  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
   userId        String
-  author        User    @relation(fields: [userId], references: [clerkId])
+  author        User      @relation(fields: [userId], references: [clerkId])
   from          String
   invoiceNumber String
   clientName    String
@@ -41,6 +42,8 @@ model Invoice {
   tax           String
   shipping      String?
   terms         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime?
 }
 
 model Item {

@@ -22,11 +22,11 @@ import {useUser} from "@clerk/nextjs";
 
 type InvoiceFormValues = z.infer<typeof invoiceFormType>;
 
-const NewInvoiceForm = ()=> {
+const NewInvoiceFormPage = ()=> {
   const [loading, setLoading] = useState(false);
   const {user} = useUser();
 
-  console.log("dashboard 28", user?.id);
+  console.log("invoice 28", user?.id);
   const invoices = trpc.invoice.getAllInvoicesForUser.useQuery();
   const createInvoice = trpc.invoice.createNewInvoice.useMutation({
     onSuccess: () => {
@@ -87,7 +87,7 @@ const NewInvoiceForm = ()=> {
 
   return (
     <div className="max-w-3xl mx-auto p-8">
-      <h1 className="text-2xl font-semibold mb-6">Create New Invoice</h1>
+      <h1 className="text-2xl font-semibold mb-6">🧾Create New Invoice</h1>
 
       <Form {...form}>
         <form
@@ -299,4 +299,4 @@ const NewInvoiceForm = ()=> {
   );
 }
 
-export default NewInvoiceForm;
+export default NewInvoiceFormPage;
