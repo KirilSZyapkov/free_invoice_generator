@@ -18,7 +18,7 @@ model User {
   clerkId   String    @unique
   email     String    @unique
   name      String?
-  invoices  Invoice[]
+  invoices  String[]  @default([])
   createdAt DateTime  @default(now())
   updatedAt DateTime?
 }
@@ -26,7 +26,6 @@ model User {
 model Invoice {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   userId        String
-  author        User      @relation(fields: [userId], references: [clerkId])
   from          String
   invoiceNumber String
   clientName    String

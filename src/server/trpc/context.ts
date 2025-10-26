@@ -3,7 +3,7 @@ import {db} from "../prisma";
 import {getAuth} from "@clerk/express";
 
 
-// Тук ще добавим Clerk по-късно за auth
+// Тук ще добавим Clerk по-късно за (auth)
 export const createContext = ({req, res}: CreateExpressContextOptions)=>{
   const auth = getAuth(req);
   const userId = auth.userId;
