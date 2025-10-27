@@ -12,11 +12,14 @@ import {clerkMiddleware} from "@clerk/express";
 
 dotenv.config();
 
+
+
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
+
   if(!dev){
     const buildDir = path.join(process.cwd(), ".next");
     if(!fs.existsSync(buildDir)){

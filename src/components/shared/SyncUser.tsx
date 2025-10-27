@@ -12,7 +12,7 @@ const SyncUser = ()=>{
   const {data:curUser, isLoading} = trpc.user.getUserById.useQuery(undefined,{
     enabled: isSignedIn && !!user,
   });
-  console.log("SyncUser 15", curUser);
+
     const createUser = trpc.user.createNewUser.useMutation({
       onSuccess: () => {
         toast.success("✅ User created successfully!");

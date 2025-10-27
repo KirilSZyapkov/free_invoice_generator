@@ -3,9 +3,7 @@ import {userType} from "@/types/user";
 
 export const userRouter = router({
   getAllUsers: publicProcedure.query(async ({ctx})=>{
-    console.log("🧠 Loading users from Prisma...");
     const allUsers = await ctx.prisma.user.findMany();
-    console.log("✅ Loaded users:", allUsers);
     return { success: true, allUsers };
   }),
   getUserById:publicProcedure.query(async ({ctx})=>{
