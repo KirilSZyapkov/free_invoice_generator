@@ -10,6 +10,7 @@ import { httpBatchLink } from "@trpc/client";
 import { useState } from "react";
 import {ClerkProvider} from "@clerk/nextjs";
 import NavBar from "@/components/shared/NavBar";
+import SyncUser from "@/components/shared/SyncUser";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +32,7 @@ export default function RootLayout({
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "/api/trpc"
+          url: "http://localhost:3000/api/trpc"
         }),
       ],
     })
@@ -46,7 +47,7 @@ export default function RootLayout({
           >
             <QueryClientProvider client={queryClient}>
               <NavBar/>
-
+              <SyncUser/>
               {children}
               <Toaster/>
             </QueryClientProvider>

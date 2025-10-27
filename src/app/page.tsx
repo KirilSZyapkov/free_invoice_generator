@@ -4,9 +4,9 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, FileText, Shield, Zap } from "lucide-react";
-import SyncUser from "../components/shared/SyncUser";
 
 const HomePage = () => {
+
   return (
     <main className="flex flex-col items-center justify-center px-6 py-12 sm:px-12 lg:px-24">
       {/* Hero Section */}
@@ -93,7 +93,6 @@ const HomePage = () => {
 
       {/* Footer / Sync */}
       <footer className="mt-20 text-center text-gray-500 text-sm">
-        <SyncUser />
         <p className="mt-4">
           © {new Date().getFullYear()} Free Invoice Generator — Built with ❤️ using Next.js & Clerk.
         </p>

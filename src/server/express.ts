@@ -8,7 +8,7 @@ import path from "path";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { appRouter } from "../server/trpc/appRouter";
 import { createContext } from "../server/trpc/context";
-import {clerkMiddleware,requireAuth} from "@clerk/express";
+import {clerkMiddleware} from "@clerk/express";
 
 dotenv.config();
 
@@ -48,7 +48,7 @@ app.prepare().then(() => {
 
   server.use((req, res) => handle(req, res));
 
-  const PORT = process.env.PORT || 3030;
+  const PORT = process.env.PORT || 3000;
 
   server.listen(PORT, () => {
     console.log(`Visit http://localhost:3000/`);

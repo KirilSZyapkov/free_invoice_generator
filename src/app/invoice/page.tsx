@@ -26,7 +26,7 @@ const NewInvoiceFormPage = ()=> {
   const [loading, setLoading] = useState(false);
   const {user} = useUser();
 
-  console.log("invoice 28", user?.id);
+  const allUsers = trpc.user.getAllUsers.useQuery();
   const invoices = trpc.invoice.getAllInvoicesForUser.useQuery();
   const createInvoice = trpc.invoice.createNewInvoice.useMutation({
     onSuccess: () => {
@@ -39,6 +39,8 @@ const NewInvoiceFormPage = ()=> {
     },
     onSettled: ()=> setLoading(false)
   });
+
+  console.log("create invoice 44", allUsers.data);
 
   const form = useForm<InvoiceFormValues>({
     resolver: zodResolver(invoiceFormType),

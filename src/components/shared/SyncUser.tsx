@@ -7,36 +7,41 @@ import {trpc} from "@/utils/trpc";
 import {toast} from "sonner";
 
 const SyncUser = ()=>{
-  const {user} = useUser();
+  const {user, isSignedIn, isLoaded} = useUser();
 
-  const createUser = trpc.user.createNewUser.useMutation({
-    onSuccess: () => {
-      toast.success("✅ User created successfully!");
-    },
-    onError: (error)=>{
-      console.error("❌ Error creating user:", error);
-      toast.error("Something went wrong while creating the new user.");
-    },
+  const {data:curUser, isLoading} = trpc.user.getUserById.useQuery(undefined,{
+    enabled: isSignedIn && !!user,
   });
-
+  console.log("SyncUser 15", curUser);
+    const createUser = trpc.user.createNewUser.useMutation({
+      onSuccess: () => {
+        toast.success("✅ User created successfully!");
+      },
+      onError: (error)=>{
+        console.error("❌ Error creating user:", error);
+        toast.error("Something went wrong while creating the new user.");
+      },
+    });
 
   useEffect(() => {
-    if(user) {
+    if(!isLoaded) return;
+
+    if(!isSignedIn || !user) return;
+
+    if(!curUser && !isLoading) {
       createUser.mutate({
         clerkId: user.id,
         email: user?.emailAddresses[0].emailAddress,
         name: user?.firstName || "Guest",
       })
     }
-  }, []);
+  }, [isLoaded, isSignedIn, user, curUser, isLoading]);
 
-  if(!user){
-    return null;
+  if(isLoading || createUser.isSuccess){
+    return <Loader/>;
   };
 
-  return(
-    <Loader/>
-  )
+  return null;
 }
 
 export default SyncUser;
