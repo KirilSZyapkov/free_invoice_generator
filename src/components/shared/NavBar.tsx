@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { SignedIn, SignedOut, SignUpButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+
 
 export const NavBar = () => {
   const [open, setOpen] = useState(false);
@@ -26,17 +27,22 @@ export const NavBar = () => {
           >
             Create Invoice
           </Link>
-
+          <Link
+            href="/help"
+            className="text-gray-700 hover:text-blue-600 transition-colors"
+          >
+            Help
+          </Link>
           <SignedIn>
             <UserButton appearance={{ elements: { userButtonAvatarBox: "w-9 h-9" } }} />
           </SignedIn>
 
           <SignedOut>
-            <SignUpButton>
+            <SignInButton>
               <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                 Sign In
               </Button>
-            </SignUpButton>
+            </SignInButton>
           </SignedOut>
         </div>
 
@@ -66,6 +72,12 @@ export const NavBar = () => {
               >
                 Create Invoice
               </Link>
+              <Link
+                href="/help"
+                className="text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                <HelpPage />
+              </Link>
 
               <SignedIn>
                 <UserButton
@@ -77,14 +89,14 @@ export const NavBar = () => {
               </SignedIn>
 
               <SignedOut>
-                <SignUpButton>
+                <SignInButton>
                   <Button
                     onClick={() => setOpen(false)}
                     className="bg-blue-600 hover:bg-blue-700 text-white w-full"
                   >
                     Sign In
                   </Button>
-                </SignUpButton>
+                </SignInButton>
               </SignedOut>
             </div>
           </motion.div>
