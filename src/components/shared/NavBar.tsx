@@ -1,15 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import {SignedIn, SignedOut, SignInButton, UserButton, useUser} from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { trpc } from "@/utils/trpc";
 
 
 export const NavBar = () => {
   const [open, setOpen] = useState(false);
+  const { user, isSignedIn } = useUser();
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md shadow-sm">
@@ -34,6 +36,7 @@ export const NavBar = () => {
             Help
           </Link>
           <SignedIn>
+            <Link href={`/user/${user?.id}`}>My Account</Link>
             <UserButton appearance={{ elements: { userButtonAvatarBox: "w-9 h-9" } }} />
           </SignedIn>
 

@@ -1,6 +1,6 @@
 import express from 'express';
 import PDFDocument from 'pdfkit';
-import { db } from '../prisma';
+import { db } from '../db/prisma';
 
 export const pdfRouter = express.Router();
 

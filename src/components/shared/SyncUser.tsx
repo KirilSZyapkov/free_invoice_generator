@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
-import Loader from "./Loader";
 import { trpc } from "@/utils/trpc";
 import { toast } from "sonner";
 

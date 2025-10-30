@@ -1,5 +1,5 @@
 import {CreateExpressContextOptions} from '@trpc/server/adapters/express';
-import {db} from "../prisma";
+import {db} from "../db/prisma";
 import {getAuth} from "@clerk/express";
 
 
