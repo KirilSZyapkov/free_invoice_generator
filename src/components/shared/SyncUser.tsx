@@ -9,13 +9,14 @@ import { toast } from "sonner";
 const SyncUser = () => {
   const { user, isSignedIn, isLoaded } = useUser();
 
-  const { data: curUser, isLoading } = trpc.user.getUserById.useQuery(undefined, {
+  const { data: curUser, isLoading, refetch } = trpc.user.getUserById.useQuery(undefined, {
     enabled: isSignedIn && !!user,
   });
 
   const createUser = trpc.user.createNewUser.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("✅ User created successfully!");
+      await refetch();
     },
     onError: (error) => {
       console.error("❌ Error creating user:", error);
@@ -32,18 +33,10 @@ const SyncUser = () => {
       createUser.mutate({
         clerkId: user.id,
         email: user?.emailAddresses[0].emailAddress,
-        name: user?.firstName || "Guest",
+        name: user?.firstName || user?.fullName || user?.username || "Guest",
       })
     }
-  }, [isLoaded, isSignedIn, user, curUser, isLoading]);
-
-  if (isLoading || createUser.isSuccess) {
-    return (<div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
-      <div className="relative w-full bg-white rounded-xl shadow-lg p-6">
-        <Loader />;
-      </div>
-    </div>)
-  };
+  }, [isLoaded, isSignedIn, user?.id, curUser, isLoading]);
 
   return null;
 }
