@@ -39,8 +39,6 @@ const NewInvoiceFormPage = ()=> {
     onSettled: ()=> setLoading(false)
   });
 
-  console.log("create invoice 42", curUser?.user);
-
   const form = useForm<InvoiceFormValues>({
     resolver: zodResolver(invoiceFormType),
     defaultValues: {
