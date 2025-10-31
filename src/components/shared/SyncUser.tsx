@@ -14,7 +14,12 @@ const SyncUser = () => {
 
   const createUser = trpc.user.createNewUser.useMutation({
     onSuccess: async () => {
-      toast.success("✅ User created successfully!");
+      if(curUser?.user){
+        toast.success(`✅ Welcome ${curUser.user.name}` );
+      } else {
+        toast.success("✅ User created successfully!");
+
+      }
       await refetch();
     },
     onError: (error) => {
@@ -34,6 +39,8 @@ const SyncUser = () => {
         email: user?.emailAddresses[0].emailAddress,
         name: user?.firstName || user?.fullName || user?.username || "Guest",
       })
+    } else if(curUser?.user){
+      toast.success(`✅ Welcome ${curUser.user.name}`);
     }
   }, [isLoaded, isSignedIn, user?.id, curUser, isLoading]);
 
