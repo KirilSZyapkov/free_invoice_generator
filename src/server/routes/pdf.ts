@@ -5,8 +5,6 @@ import { db } from '../db/prisma';
 export const pdfRouter = express.Router();
 
 pdfRouter.get("/:invoiceId", async (req, res) => {
-  console.log("✅ PDF Route hit!", req.params);
-  res.json({ ok: true, params: req.params });
 
   const { invoiceId } = req.params;
 
@@ -20,7 +18,7 @@ pdfRouter.get("/:invoiceId", async (req, res) => {
     };
 
     res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", `attachement; filename=invoice-${invoice.invoiceNumber}.pdf`);
+    res.setHeader("Content-Disposition", `attachment; filename=invoice-${invoice.invoiceNumber}.pdf`);
 
     const doc = new PDFDocument({ margin: 50 });
     doc.pipe(res);
@@ -45,6 +43,8 @@ pdfRouter.get("/:invoiceId", async (req, res) => {
     doc.end();
   } catch (error: unknown) {
     console.error("❌ Error generating PDF:", error);
-    res.status(500).json({ error: "Failed to generate PDF" });
+    if(!res.headersSent){
+      return res.status(500).json({ error: "Failed to generate PDF" });
+    }
   }
 })
