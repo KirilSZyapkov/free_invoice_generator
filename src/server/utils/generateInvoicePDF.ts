@@ -105,8 +105,8 @@ export async function generateInvoicePDF(invoice: Invoice) {
   doc.restore();
 
   doc.font(fonts.bold).fillColor("white");
-  doc.text("TOTAL:", 360, totalsY + 95);
-  doc.text(`$${total.toFixed(2)}`, 470, totalsY + 75, { align: "right" });
+  doc.text("TOTAL:", 360, totalsY + 78);
+  doc.text(`$${total.toFixed(2)}`, 470, totalsY + 78, { align: "right" });
   doc.fillColor(colors.text);
 
   // --- NOTES & TERMS ---
@@ -129,9 +129,10 @@ export async function generateInvoicePDF(invoice: Invoice) {
   doc.fontSize(9).fillColor(colors.subtext).text(
     "Generated automatically — Free Invoice Generator (Beta)",
     0,
-    doc.page.height - 15,
+    doc.page.height - 65,
     { align: "center" }
   );
+
 
   doc.end();
   return doc;
