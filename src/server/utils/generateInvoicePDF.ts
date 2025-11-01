@@ -1,101 +1,138 @@
 import PDFDocument from "pdfkit";
-import { Invoice } from "@prisma/client"; // ако имаш тип от Prisma
+import { Invoice } from "@prisma/client";
 
 export async function generateInvoicePDF(invoice: Invoice) {
-  const doc = new PDFDocument({ margin: 50 });
+  const colors = {
+    primary: '#2563eb',
+    text: '#000000',
+    subtext: '#444444',
+    border: '#e5e7eb',
+    lightGray: '#f5f5f5',
+  };
 
-  // --- HEADER ---
-  doc
-    .font("Helvetica-Bold")
-    .fontSize(20)
-    .text(`INVOICE #${invoice.invoiceNumber}`, { align: "right" })
-    .moveDown();
+  const fonts = {
+    normal: 'Helvetica',
+    bold: 'Helvetica-Bold',
+  };
 
-  // --- FROM / TO info ---
-  doc
-    .font("Helvetica")
+  const doc = new PDFDocument({ margin: 50, size: 'A4' });
+
+  // --- HEADER BAR ---
+  doc.save();
+  doc.rect(0, 0, doc.page.width, 20).fill(colors.primary);
+  doc.restore(); // ⬅️ връща нормален контекст (иначе всичко остава синьо)
+
+  doc.moveDown(2);
+  doc.font(fonts.bold)
+    .fontSize(22)
+    .fillColor(colors.primary)
+    .text("INVOICE", { align: "right" })
+    .fillColor(colors.subtext)
     .fontSize(12)
-    .text("From:", { underline: true })
-    .text(invoice.from)
-    .moveDown();
+    .text(`#${invoice.invoiceNumber}`, { align: "right" })
+    .moveDown(2);
 
-  doc.text("Bill To:", { underline: true }).text(invoice.clientName).moveDown();
+  // --- FROM / BILL TO ---
+  const startY = doc.y;
+
+  doc.font(fonts.bold).fillColor(colors.text).text("FROM:");
+  doc.font(fonts.normal).text(invoice.from || "-");
+
+  doc.x = 300;
+  doc.y = startY;
+  doc.font(fonts.bold).text("BILL TO:");
+  doc.font(fonts.normal).text(invoice.clientName || "-");
+
+  doc.x = 50;
+  doc.moveDown(1.5);
 
   // --- INVOICE DETAILS ---
-  doc
-    .font("Helvetica")
-    .fontSize(12)
-    .text(`Date: ${invoice.date}`)
-    .text(`Due Date: ${invoice.dueDate}`)
-    .text(`Payment Terms: ${invoice.paymentTerms}`)
-    .moveDown();
+  const infoY = doc.y;
+  doc.font(fonts.normal).fontSize(10).fillColor(colors.subtext);
+  doc.text(`Date Issued: ${invoice.date || "-"}`);
+  doc.text(`Due Date: ${invoice.dueDate || "-"}`);
+
+  doc.x = 300;
+  doc.y = infoY;
+  doc.text(`Payment Terms: ${invoice.paymentTerms || "-"}`);
+  doc.moveDown(2);
 
   // --- TABLE HEADER ---
-  const tableTop = doc.y + 10;
-  const itemSpacing = 20;
+  const tableTop = doc.y;
+  doc.save();
+  doc.rect(50, tableTop, 500, 20).fill(colors.lightGray);
+  doc.restore();
 
-  doc
-    .font("Helvetica-Bold")
-    .text("Description", 50, tableTop)
-    .text("Qty", 300, tableTop)
-    .text("Rate", 350, tableTop)
-    .text("Total", 420, tableTop);
+  doc.font(fonts.bold)
+    .fillColor(colors.text)
+    .text("Description", 60, tableTop + 5)
+    .text("Qty", 350, tableTop + 5)
+    .text("Rate", 400, tableTop + 5)
+    .text("Amount", 470, tableTop + 5);
 
-  // --- TABLE CONTENT ---
-  doc
-    .moveTo(50, tableTop + 15)
-    .lineTo(550, tableTop + 15)
-    .stroke();
-
-  doc
-    .font("Helvetica")
-    .fontSize(12)
-    .text(invoice.description, 50, tableTop + itemSpacing)
-    .text(invoice.quantity.toString(), 300, tableTop + itemSpacing)
-    .text(Number(invoice.rate).toFixed(2), 350, tableTop + itemSpacing)
-    .text((Number(invoice.quantity) * Number(invoice.rate)).toFixed(2), 420, tableTop + itemSpacing);
+  // --- TABLE ROW ---
+  const rowY = tableTop + 25;
+  doc.font(fonts.normal)
+    .fillColor(colors.text)
+    .text(invoice.description || "-", 60, rowY)
+    .text(invoice.quantity?.toString() || "0", 350, rowY)
+    .text(Number(invoice.rate).toFixed(2), 400, rowY)
+    .text((Number(invoice.quantity) * Number(invoice.rate)).toFixed(2), 470, rowY);
 
   // --- TOTALS ---
   const subtotal = Number(invoice.quantity) * Number(invoice.rate);
-  const tax = Number(invoice.tax) ?? 0;
-  const discount = Number(invoice.discount) ?? 0;
-  const shipping = Number(invoice.shipping) ?? 0;
+  const tax = Number(invoice.tax || 0);
+  const discount = Number(invoice.discount || 0);
+  const shipping = Number(invoice.shipping || 0);
   const total = subtotal + tax + shipping - discount;
 
-  doc
-    .moveDown(4)
-    .font("Helvetica-Bold")
-    .text(`Subtotal: ${subtotal.toFixed(2)}`, { align: "right" })
-    .text(`Tax: ${tax.toFixed(2)}`, { align: "right" })
-    .text(`Discount: ${discount.toFixed(2)}`, { align: "right" })
-    .text(`Shipping: ${shipping.toFixed(2)}`, { align: "right" })
-    .text(`Total: ${total.toFixed(2)}`, { align: "right" })
-    .moveDown(2);
+  const totalsY = doc.y + 40;
+  doc.font(fonts.normal).fontSize(10).fillColor(colors.text);
+  doc.text("Subtotal:", 360, totalsY);
+  doc.text("Tax:", 360, totalsY + 15);
+  doc.text("Shipping:", 360, totalsY + 30);
+  doc.text("Discount:", 360, totalsY + 45);
+
+  doc.font(fonts.bold);
+  doc.text(`$${subtotal.toFixed(2)}`, 470, totalsY, { align: "right" });
+  doc.text(`$${tax.toFixed(2)}`, 470, totalsY + 15, { align: "right" });
+  doc.text(`$${shipping.toFixed(2)}`, 470, totalsY + 30, { align: "right" });
+  doc.text(`$${discount.toFixed(2)}`, 470, totalsY + 45, { align: "right" });
+
+  // Highlight total
+  doc.save();
+  doc.rect(350, totalsY + 70, 200, 25).fill(colors.primary);
+  doc.restore();
+
+  doc.font(fonts.bold).fillColor("white");
+  doc.text("TOTAL:", 360, totalsY + 95);
+  doc.text(`$${total.toFixed(2)}`, 470, totalsY + 75, { align: "right" });
+  doc.fillColor(colors.text);
 
   // --- NOTES & TERMS ---
+  doc.moveDown(3);
   if (invoice.notes) {
-    doc
-      .font("Helvetica")
-      .fontSize(10)
-      .text("Notes:", { underline: true })
-      .text(invoice.notes)
-      .moveDown();
+    doc.font(fonts.bold).text("Notes:");
+    doc.font(fonts.normal).fillColor(colors.subtext).text(invoice.notes).moveDown();
   }
 
   if (invoice.terms) {
-    doc.font("Helvetica").fontSize(10).text("Terms:", { underline: true }).text(invoice.terms);
+    doc.font(fonts.bold).fillColor(colors.text).text("Terms & Conditions:");
+    doc.font(fonts.normal).fillColor(colors.subtext).text(invoice.terms);
   }
 
   // --- FOOTER ---
-  doc
-    .moveDown(2)
-    .fontSize(10)
-    .fillColor("gray")
-    .text("Generated automatically — Free Invoice Generator (Beta)", {
-      align: "center",
-    });
+  doc.save();
+  doc.rect(0, doc.page.height - 40, doc.page.width, 40).fill(colors.lightGray);
+  doc.restore();
+
+  doc.fontSize(9).fillColor(colors.subtext).text(
+    "Generated automatically — Free Invoice Generator (Beta)",
+    0,
+    doc.page.height - 15,
+    { align: "center" }
+  );
 
   doc.end();
-
   return doc;
 }
