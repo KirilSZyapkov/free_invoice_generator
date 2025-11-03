@@ -15,7 +15,7 @@ export const invoiceRouter = router({
   createNewInvoice: publicProcedure
     .input(invoiceType)
     .mutation(async ({ ctx,input }) => {
-      console.log("📥 Incoming input:", input);
+
       try {
         const createdInvoice = await ctx.prisma.invoice.create({
           data:{
@@ -37,7 +37,14 @@ export const invoiceRouter = router({
             terms: input.terms
           }
         });
-        console.log("Creating invoice", input);
+        const pdfDoc = await generateInvoicePDF(createdInvoice);
+        const chunks: Uint8Array[] =[];
+        pdfDoc.on("data", (chunk)=> chunks.push(chunk));
+        pdfDoc.on("end", ()=>{
+          const pdfBuffer = Buffer.concat(chunks);
+
+          console.log("server/trpc/routs/invoice",pdfBuffer);
+        })
         return { success: true, createdInvoice };
       } catch (e) {
         console.error("❌ Prisma error:", e);

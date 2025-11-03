@@ -37,7 +37,7 @@ const HomePage = () => {
           className="flex flex-col sm:flex-row justify-center gap-4 mt-6"
         >
           <Link href="/invoice">
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl cursor-pointer">
               Create Invoice <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>
@@ -45,7 +45,7 @@ const HomePage = () => {
           <Link href="/sign-up">
             <Button
               variant="outline"
-              className="px-8 py-6 text-lg rounded-xl border-gray-300 hover:border-blue-600"
+              className="px-8 py-6 text-lg rounded-xl border-gray-300 hover:border-blue-600 cursor-pointer"
             >
               Sign up (optional)
             </Button>
