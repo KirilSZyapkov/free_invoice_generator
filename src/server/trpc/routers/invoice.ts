@@ -39,9 +39,10 @@ export const invoiceRouter = router({
         });
         const pdfDoc = await generateInvoicePDF(createdInvoice);
         const chunks: Uint8Array[] =[];
+        let pdfBuffer: =[];
         pdfDoc.on("data", (chunk)=> chunks.push(chunk));
         pdfDoc.on("end", ()=>{
-          const pdfBuffer = Buffer.concat(chunks);
+          pdfBuffer = Buffer.concat(chunks);
 
           console.log("server/trpc/routs/invoice",pdfBuffer);
         })
