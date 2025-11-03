@@ -39,14 +39,21 @@ export const invoiceRouter = router({
         });
         const pdfDoc = await generateInvoicePDF(createdInvoice);
         const chunks: Uint8Array[] =[];
-        let pdfBuffer: =[];
-        pdfDoc.on("data", (chunk)=> chunks.push(chunk));
-        pdfDoc.on("end", ()=>{
-          pdfBuffer = Buffer.concat(chunks);
+        const pdfBuffer = new Promise<Buffer>((resolve, reject)=>{
+          pdfDoc.on("data", (chunk)=>{
+            chunks.push(chunk);
+          });
+          pdfDoc.on("end",()=>{
+            const newPdfBuffer = Buffer.concat(chunks);
+            resolve(newPdfBuffer);
+          });
+          pdfDoc.on("error", (err:unknown)=>{
+            reject(err);
+          });
 
-          console.log("server/trpc/routs/invoice",pdfBuffer);
+          pdfDoc.end();
         })
-        return { success: true, createdInvoice };
+        return { success: true, createdInvoice, pdfBuffer };
       } catch (e) {
         console.error("❌ Prisma error:", e);
         throw new Error("Failed to create invoice");
