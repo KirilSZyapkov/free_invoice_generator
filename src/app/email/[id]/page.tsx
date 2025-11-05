@@ -1,6 +1,9 @@
 import EmailForm from "@/components/forms/EmailForm";
 
-const EmailPage = () => {
+const EmailPage = async ({params}: { params: Promise<{ id: string }
+>
+}) => {
+  const {id} = await params;
   return (
     <section>
       <h1>Email Page</h1>
