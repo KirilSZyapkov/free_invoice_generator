@@ -31,8 +31,6 @@ const NewInvoiceFormPage = ()=> {
     onSuccess: () => {
       toast.success("✅ Invoice created successfully!");
       form.reset();
-      confirm("Send the invoice by email!");
-
     },
     onError: (error)=>{
       console.error("❌ Error creating invoice:", error);
@@ -83,7 +81,9 @@ const NewInvoiceFormPage = ()=> {
        shipping: values.shipping,
        terms: values.terms,
      });
+    if(confirm("Send the invoice by email!")){
 
+    }
   };
 
   return (
