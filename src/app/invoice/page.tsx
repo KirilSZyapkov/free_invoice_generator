@@ -1,13 +1,14 @@
 "use client";
 
 import {useState} from "react";
-import { trpc } from "@/utils/trpc";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { invoiceFormType } from "@/types/invoiceForm"; // <-- Тук е твоя schema
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import {trpc} from "@/utils/trpc";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {useForm} from "react-hook-form";
+import {useRouter} from "next/navigation";
+import {z} from "zod";
+import {invoiceFormType} from "@/types/invoiceForm"; // <-- Тук е твоя schema
+import {Button} from "@/components/ui/button";
+import {toast} from "sonner";
 import {
   Form,
   FormControl,
@@ -16,27 +17,31 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import {Input} from "@/components/ui/input";
+import {Textarea} from "@/components/ui/textarea";
 import {useUser} from "@clerk/nextjs";
 
 type InvoiceFormValues = z.infer<typeof invoiceFormType>;
 
-const NewInvoiceFormPage = ()=> {
+const NewInvoiceFormPage = () => {
   const [loading, setLoading] = useState(false);
   const {user} = useUser();
-  const {data:curUser} = trpc.user.getUserById.useQuery();
-  const invoices = trpc.invoice.getAllInvoicesForUser.useQuery();
+  const router = useRouter();
+  const {data: curUser} = trpc.user.getUserById.useQuery();
+
   const createInvoice = trpc.invoice.createNewInvoice.useMutation({
-    onSuccess: () => {
+    onSuccess: ({createdInvoice}) => {
       toast.success("✅ Invoice created successfully!");
       form.reset();
+      if (confirm("Send the invoice by email!")) {
+        router.push(`/email/${createdInvoice.id}`);
+      }
     },
-    onError: (error)=>{
+    onError: (error) => {
       console.error("❌ Error creating invoice:", error);
       toast.error("Something went wrong while creating the invoice.");
     },
-    onSettled: ()=> setLoading(false)
+    onSettled: () => setLoading(false)
   });
 
   const form = useForm<InvoiceFormValues>({
@@ -63,27 +68,25 @@ const NewInvoiceFormPage = ()=> {
   const onSubmit = (values: InvoiceFormValues) => {
     setLoading(true);
 
-     createInvoice.mutate({
-       userId: user?.id || "guest",
-       from: values.from,
-       invoiceNumber: values.invoiceNumber,
-       clientName: values.clientName,
-       date: values.date,
-       paymentTerms: values.paymentTerms,
-       dueDate: values.dueDate,
-       poNumber: values.poNumber,
-       description: values.description,
-       quantity: values.quantity,
-       rate: values.rate,
-       tax: values.tax,
-       notes: values.notes,
-       discount: values.discount,
-       shipping: values.shipping,
-       terms: values.terms,
-     });
-    if(confirm("Send the invoice by email!")){
+    createInvoice.mutate({
+      userId: user?.id || "guest",
+      from: values.from,
+      invoiceNumber: values.invoiceNumber,
+      clientName: values.clientName,
+      date: values.date,
+      paymentTerms: values.paymentTerms,
+      dueDate: values.dueDate,
+      poNumber: values.poNumber,
+      description: values.description,
+      quantity: values.quantity,
+      rate: values.rate,
+      tax: values.tax,
+      notes: values.notes,
+      discount: values.discount,
+      shipping: values.shipping,
+      terms: values.terms,
+    });
 
-    }
   };
 
   return (
@@ -98,13 +101,13 @@ const NewInvoiceFormPage = ()=> {
           <FormField
             control={form.control}
             name="from"
-            render={({ field }) => (
+            render={({field}) => (
               <FormItem>
                 <FormLabel>From</FormLabel>
                 <FormControl>
                   <Input placeholder="Company name" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage/>
               </FormItem>
             )}
           />
@@ -112,13 +115,13 @@ const NewInvoiceFormPage = ()=> {
           <FormField
             control={form.control}
             name="invoiceNumber"
-            render={({ field }) => (
+            render={({field}) => (
               <FormItem>
                 <FormLabel>Invoice Number</FormLabel>
                 <FormControl>
                   <Input placeholder="INV-001" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage/>
               </FormItem>
             )}
           />
@@ -126,13 +129,13 @@ const NewInvoiceFormPage = ()=> {
           <FormField
             control={form.control}
             name="clientName"
-            render={({ field }) => (
+            render={({field}) => (
               <FormItem>
                 <FormLabel>Client Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Client name" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage/>
               </FormItem>
             )}
           />
@@ -140,13 +143,13 @@ const NewInvoiceFormPage = ()=> {
           <FormField
             control={form.control}
             name="date"
-            render={({ field }) => (
+            render={({field}) => (
               <FormItem>
                 <FormLabel>Date</FormLabel>
                 <FormControl>
                   <Input type="date" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage/>
               </FormItem>
             )}
           />
@@ -154,13 +157,13 @@ const NewInvoiceFormPage = ()=> {
           <FormField
             control={form.control}
             name="paymentTerms"
-            render={({ field }) => (
+            render={({field}) => (
               <FormItem>
                 <FormLabel>Payment Terms</FormLabel>
                 <FormControl>
                   <Input placeholder="Net 30" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage/>
               </FormItem>
             )}
           />
@@ -168,13 +171,13 @@ const NewInvoiceFormPage = ()=> {
           <FormField
             control={form.control}
             name="dueDate"
-            render={({ field }) => (
+            render={({field}) => (
               <FormItem>
                 <FormLabel>Due Date</FormLabel>
                 <FormControl>
                   <Input type="date" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage/>
               </FormItem>
             )}
           />
@@ -182,13 +185,13 @@ const NewInvoiceFormPage = ()=> {
           <FormField
             control={form.control}
             name="poNumber"
-            render={({ field }) => (
+            render={({field}) => (
               <FormItem>
                 <FormLabel>PO Number</FormLabel>
                 <FormControl>
                   <Input placeholder="PO-123" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage/>
               </FormItem>
             )}
           />
@@ -196,13 +199,13 @@ const NewInvoiceFormPage = ()=> {
           <FormField
             control={form.control}
             name="description"
-            render={({ field }) => (
+            render={({field}) => (
               <FormItem className="col-span-2">
                 <FormLabel>Description</FormLabel>
                 <FormControl>
                   <Textarea placeholder="Item or service details..." {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage/>
               </FormItem>
             )}
           />
@@ -210,13 +213,13 @@ const NewInvoiceFormPage = ()=> {
           <FormField
             control={form.control}
             name="quantity"
-            render={({ field }) => (
+            render={({field}) => (
               <FormItem>
                 <FormLabel>Quantity</FormLabel>
                 <FormControl>
                   <Input type="number" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage/>
               </FormItem>
             )}
           />
@@ -224,13 +227,13 @@ const NewInvoiceFormPage = ()=> {
           <FormField
             control={form.control}
             name="rate"
-            render={({ field }) => (
+            render={({field}) => (
               <FormItem>
                 <FormLabel>Rate</FormLabel>
                 <FormControl>
                   <Input type="number" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage/>
               </FormItem>
             )}
           />
@@ -238,13 +241,13 @@ const NewInvoiceFormPage = ()=> {
           <FormField
             control={form.control}
             name="tax"
-            render={({ field }) => (
+            render={({field}) => (
               <FormItem>
                 <FormLabel>Tax (%)</FormLabel>
                 <FormControl>
                   <Input type="number" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage/>
               </FormItem>
             )}
           />
@@ -252,13 +255,13 @@ const NewInvoiceFormPage = ()=> {
           <FormField
             control={form.control}
             name="discount"
-            render={({ field }) => (
+            render={({field}) => (
               <FormItem>
                 <FormLabel>Discount</FormLabel>
                 <FormControl>
                   <Input placeholder="0.00" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage/>
               </FormItem>
             )}
           />
@@ -266,13 +269,13 @@ const NewInvoiceFormPage = ()=> {
           <FormField
             control={form.control}
             name="shipping"
-            render={({ field }) => (
+            render={({field}) => (
               <FormItem>
                 <FormLabel>Shipping</FormLabel>
                 <FormControl>
                   <Input placeholder="0.00" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage/>
               </FormItem>
             )}
           />
@@ -280,13 +283,13 @@ const NewInvoiceFormPage = ()=> {
           <FormField
             control={form.control}
             name="terms"
-            render={({ field }) => (
+            render={({field}) => (
               <FormItem className="col-span-2">
                 <FormLabel>Terms</FormLabel>
                 <FormControl>
                   <Textarea placeholder="Payment terms or notes..." {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage/>
               </FormItem>
             )}
           />
