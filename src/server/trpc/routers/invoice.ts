@@ -1,6 +1,5 @@
 import { router, publicProcedure } from '../router';
 import { invoiceType } from "@/types/invoice";
-import { generateInvoicePDF } from "../../utils/generateInvoicePDF";
 import { z } from 'zod';
 
 export const invoiceRouter = router({
@@ -36,23 +35,8 @@ export const invoiceRouter = router({
             terms: input.terms
           }
         });
-        const pdfDoc = await generateInvoicePDF(createdInvoice);
-        const chunks: Uint8Array[] = [];
-        const pdfBuffer = new Promise<Buffer>((resolve, reject) => {
-          pdfDoc.on("data", (chunk) => {
-            chunks.push(chunk);
-          });
-          pdfDoc.on("end", () => {
-            const newPdfBuffer = Buffer.concat(chunks);
-            resolve(newPdfBuffer);
-          });
-          pdfDoc.on("error", (err: unknown) => {
-            reject(err);
-          });
-
-          pdfDoc.end();
-        })
-        return { success: true, createdInvoice, pdfBuffer };
+        
+        return { success: true, createdInvoice };
       } catch (e) {
         console.error("❌ Prisma error:", e);
         throw new Error("Failed to create invoice");

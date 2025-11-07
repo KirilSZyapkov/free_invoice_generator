@@ -1,3 +1,5 @@
+// Downloaded invoice PDF route
+
 import express from 'express';
 import { db } from '../db/prisma';
 import { generateInvoicePDF } from "../utils/generateInvoicePDF";
