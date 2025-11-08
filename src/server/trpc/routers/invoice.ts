@@ -47,7 +47,7 @@ export const invoiceRouter = router({
     .query(async ({ ctx, input }) => {
       const id: string = input.id;
       try {
-        const invoiceById = ctx.prisma.invoice.findFirst({ 
+        const invoiceById = await ctx.prisma.invoice.findFirst({ 
           where: {id: id}
          });
         return { succes: true, invoiceById };
