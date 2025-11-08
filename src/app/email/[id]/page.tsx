@@ -7,7 +7,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const EmailPage = () => {
-  const [pdfBuffer, setPdfBuffer] = useState<Uint8Array | null>(null);
+  const [pdfBuffer, setPdfBuffer] = useState<string | null>(null);
   const params = useParams();
   const id = params?.id as string;
   const { data: invoicedById, isLoading, error } = trpc.invoice.getInvoiceById.useQuery({ id }, { enabled: !!id });
@@ -23,7 +23,8 @@ const EmailPage = () => {
           updatedAt: invoice.updatedAt ? new Date(invoice.updatedAt) : null,
         };
         const buff = await generatePdfBuffer(normalizedInvoice);
-        setPdfBuffer(buff);
+        const bse64 = buff.toString("base64");
+        setPdfBuffer(bse64);
       }
     };
 
