@@ -33,8 +33,12 @@ const NewInvoiceFormPage = () => {
     onSuccess: ({createdInvoice}) => {
       toast.success("✅ Invoice created successfully!");
       form.reset();
-      if (confirm("Send the invoice by email!")) {
+      const sendNow = confirm("Would you like to send this invoice by email?");
+
+      if(sendNow){
         router.push(`/email/${createdInvoice.id}`);
+      } else {
+        toast.info("This invoice was saved locally.");
       }
     },
     onError: (error) => {

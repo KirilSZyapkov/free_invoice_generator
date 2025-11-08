@@ -1,32 +1,32 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Input } from "@/components/ui/input";
+// import { ScrollArea } from "@/components/ui/scroll-area";
+// import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
+// import { Search } from "lucide-react";
 
 export default function HelpPage() {
-  const sections = [
-    {
-      id: "basics",
-      title: "Invoice Basics",
-      items: [
-        { title: "Create New Invoice", href: "#create" },
-        { title: "Managing Invoices", href: "#manage" },
-        { title: "Templates", href: "#templates" },
-        { title: "PDF Export", href: "#export" },
-      ]
-    },
-    {
-      id: "features",
-      title: "Key Features",
-      items: [
-        { title: "Email Integration", href: "#email" },
-        { title: "Custom Branding", href: "#branding" },
-        { title: "Payment Terms", href: "#payment" },
-        { title: "Tax Calculation", href: "#tax" },
-      ]
-    }
-  ];
+  // const sections = [
+  //   {
+  //     id: "basics",
+  //     title: "Invoice Basics",
+  //     items: [
+  //       { title: "Create New Invoice", href: "#create" },
+  //       { title: "Managing Invoices", href: "#manage" },
+  //       { title: "Templates", href: "#templates" },
+  //       { title: "PDF Export", href: "#export" },
+  //     ]
+  //   },
+  //   {
+  //     id: "features",
+  //     title: "Key Features",
+  //     items: [
+  //       { title: "Email Integration", href: "#email" },
+  //       { title: "Custom Branding", href: "#branding" },
+  //       { title: "Payment Terms", href: "#payment" },
+  //       { title: "Tax Calculation", href: "#tax" },
+  //     ]
+  //   }
+  // ];
 
   return (
     <div className="min-h-screen bg-gray-50/30 dark:bg-gray-900/30">
