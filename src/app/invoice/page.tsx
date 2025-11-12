@@ -20,6 +20,7 @@ import {
 import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 import {useUser} from "@clerk/nextjs";
+import Loader from "@/components/shared/Loader";
 
 type InvoiceFormValues = z.infer<typeof invoiceFormType>;
 
@@ -30,7 +31,7 @@ const NewInvoiceFormPage = () => {
   const {data: curUser} = trpc.user.getUserById.useQuery();
 
   const createInvoice = trpc.invoice.createNewInvoice.useMutation({
-    onSuccess: ({createdInvoice}) => {
+    onSuccess: async ({createdInvoice}) => {
       toast.success("✅ Invoice created successfully!");
       form.reset();
       const sendNow = confirm("Would you like to send this invoice by email?");

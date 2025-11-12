@@ -8,21 +8,27 @@ import {useEffect, useState} from "react";
 
 const EmailPage = () => {
   const [pdfBuffer, setPdfBuffer] = useState<string | null>(null);
-  const [error, setError] = useState<string>();
+  const [error, setError] = useState<string | null>(null);
   const params = useParams();
   const id = params?.id as string;
 
 
   useEffect(() => {
     async function buffer() {
-      const response = await fetch(`/api/generate-pdf?id=${id}`);
-      if (response.ok) {
-        setError("Faild to create PDF");
-        return;
+      try {
+        const response = await fetch(`/api/generate_pdf?id=${id}`);
+        if (response.ok) {
+          const base64: string = await response.json();
+          console.log("email page", base64);
+          setPdfBuffer(base64);
+          setError(null);
+        } else {
+          console.log(response);
+        }
+      } catch (e: unknown) {
+        setError("Error fetching PDF");
       }
-      ;
-      const base64: string = await response.json();
-      setPdfBuffer(base64);
+
     };
 
     buffer();
