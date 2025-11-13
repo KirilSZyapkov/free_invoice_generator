@@ -29,8 +29,9 @@ export async function GET(req: Request) {
     };
     const buff = await generatePdfBuffer(normalizedInvoice);
     const base64 = buff.toString("base64");
+    const iNumber = invoice.invoiceNumber;
 
-    return NextResponse.json({base64}, {status: 200});
+    return NextResponse.json({base64, iNumber}, {status: 200});
 
   } catch (e: unknown) {
     console.error("❌ PDF generation error:", e);

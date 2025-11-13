@@ -20,7 +20,6 @@ import {
 import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 import {useUser} from "@clerk/nextjs";
-import Loader from "@/components/shared/Loader";
 
 type InvoiceFormValues = z.infer<typeof invoiceFormType>;
 
