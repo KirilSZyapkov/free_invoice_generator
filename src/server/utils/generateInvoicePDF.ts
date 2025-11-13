@@ -112,7 +112,7 @@ export async function generateInvoicePDF(invoice: Invoice) {
 
   // Highlight total
   doc.save();
-  doc.rect(350, totalsY + 70, 200, 25).fill(colors.primary);
+  doc.rect(350, totalsY + 70, 300, 25).fill(colors.primary);
   doc.restore();
 
   doc.font(fonts.bold).fillColor("white");

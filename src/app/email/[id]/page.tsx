@@ -62,7 +62,7 @@ const EmailPage = () => {
               <div className="px-4 py-3 flex items-center justify-between">
                 <div className="text-sm font-medium text-slate-700 dark:text-slate-200">Preview</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400">
-                  <a href={pdfDataUrl} download={`invoice-${invoiceNumber}.pdf`} className="underline">Download</a>
+                  {/* <a href={pdfDataUrl} download={`invoice-${invoiceNumber}.pdf`} className="underline">Download</a> */}
                 </div>
               </div>
               <div className="w-full h-[60vh] md:h-[75vh]">
