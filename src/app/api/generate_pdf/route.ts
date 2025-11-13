@@ -3,6 +3,8 @@ import {db} from "@/server/db/prisma";
 import {generatePdfBuffer} from "@/server/utils/pdfBuffer";
 import {NextResponse} from "next/server";
 
+export const runtime = "nodejs";
+
 export async function GET(req: Request) {
   const {searchParams} = new URL(req.url);
   const id = searchParams.get("id");

@@ -1,5 +1,7 @@
 import PDFDocument from "pdfkit";
 import { Invoice } from "@prisma/client";
+import path from "path";
+import fs from "fs";
 
 export async function generateInvoicePDF(invoice: Invoice) {
   const colors = {
@@ -9,13 +11,22 @@ export async function generateInvoicePDF(invoice: Invoice) {
     border: '#e5e7eb',
     lightGray: '#f5f5f5',
   };
+  const doc = new PDFDocument({ margin: 50 });
+
+  const normalFont = path.resolve("src/assets/OpenSans-Regular.ttf");
+  const boldFont = path.resolve("src/assets/OpenSans-Bold.ttf");
+
+  if(!fs.existsSync(normalFont) || !fs.existsSync(boldFont)){
+    throw new Error("Font files missing");
+  }
+
+  doc.registerFont("Normal", normalFont);
+  doc.registerFont("Bold", boldFont);
 
   const fonts = {
-    normal: 'Helvetica',
-    bold: 'Helvetica-Bold',
+    normal: "Normal",
+    bold: "Bold",
   };
-
-  const doc = new PDFDocument({ margin: 50, size: 'A4' });
 
   // --- HEADER BAR ---
   doc.save();

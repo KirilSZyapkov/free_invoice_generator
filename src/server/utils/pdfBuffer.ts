@@ -16,7 +16,6 @@ export const generatePdfBuffer = async (invoice: Invoice) => {
       reject(err);
     });
 
-    pdfDoc.end();
   });
 
   return pdfBuffer;

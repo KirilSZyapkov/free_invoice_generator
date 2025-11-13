@@ -96,6 +96,11 @@ const HomePage = () => {
         <p className="mt-4">
           © {new Date().getFullYear()} Free Invoice Generator — Built with ❤️ using Next.js & Clerk.
         </p>
+        <Button
+          onClick={() => window.open(`/api/pdf/6914d0ed6bfae20932e32693`, "_blank")}
+        >
+          Download PDF
+        </Button>
       </footer>
     </main>
   );
