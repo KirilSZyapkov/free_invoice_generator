@@ -27,7 +27,6 @@ const NewInvoiceFormPage = () => {
   const [loading, setLoading] = useState(false);
   const {user} = useUser();
   const router = useRouter();
-  const {data: curUser} = trpc.user.getUserById.useQuery();
 
   const createInvoice = trpc.invoice.createNewInvoice.useMutation({
     onSuccess: async ({createdInvoice}) => {
