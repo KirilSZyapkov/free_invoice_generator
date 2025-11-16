@@ -20,11 +20,13 @@ import {
 import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 import {useUser} from "@clerk/nextjs";
+import { useLocalStorage } from "@/utils/hooks/useLocalStorage";
 
 type InvoiceFormValues = z.infer<typeof invoiceFormType>;
 
 const NewInvoiceFormPage = () => {
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useLocalStorage<Record<string, unknown>[]>('invoice', []);
   const {user} = useUser();
   const router = useRouter();
 
@@ -71,6 +73,7 @@ const NewInvoiceFormPage = () => {
   const onSubmit = (values: InvoiceFormValues) => {
     setLoading(true);
 
+    if(user){
     createInvoice.mutate({
       userId: user?.id || "guest",
       from: values.from,
@@ -89,7 +92,9 @@ const NewInvoiceFormPage = () => {
       shipping: values.shipping,
       terms: values.terms,
     });
-
+  } else {
+    setData
+  }
   };
 
   return (
