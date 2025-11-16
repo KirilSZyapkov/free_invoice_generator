@@ -4,10 +4,20 @@ import { z } from 'zod';
 
 export const invoiceRouter = router({
   getAllInvoicesForUser: publicProcedure.query(async ({ ctx }) => {
-    return [
-      { id: 1, customer: 'Customer A' },
-      { id: 2, customer: 'Customer B' }
-    ]
+  const curUserId = ctx.userId;
+  if(!curUserId) return null;
+  try{
+    const userAllInvoices = await ctx.prisma.invoice.findMany({
+      where: {userId: curUserId}
+    });
+
+    return {userAllInvoices};
+  } catch (e: unknown) {
+    console.error("Prisma error", e);
+    if(e instanceof Error) {
+      throw new Error(`Failed to load user: ${e.message}`)
+    }
+  }
     // await ctx.prisma.invoice.findById(1); // Тук после ще вземем userId от сесията
   }),
   createNewInvoice: publicProcedure
