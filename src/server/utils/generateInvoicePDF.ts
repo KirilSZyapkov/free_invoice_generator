@@ -3,7 +3,7 @@ import { Invoice } from "@prisma/client";
 import path from "path";
 import fs from "fs";
 
-export async function generateInvoicePDF(invoice: Invoice) {
+export async function generateInvoicePDF(invoice: Partial<Invoice>) {
   const colors = {
     primary: '#2563eb',
     text: '#000000',
@@ -11,7 +11,7 @@ export async function generateInvoicePDF(invoice: Invoice) {
     border: '#e5e7eb',
     lightGray: '#f5f5f5',
   };
-  const doc = new PDFDocument({ margin: 50 });
+  const doc = new PDFDocument({size: "A4", margin: 50 });
 
   const normalFont = path.resolve("src/assets/OpenSans-Regular.ttf");
   const boldFont = path.resolve("src/assets/OpenSans-Bold.ttf");

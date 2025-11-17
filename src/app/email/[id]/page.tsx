@@ -1,32 +1,58 @@
 "use client";
 
 import EmailForm from "@/components/forms/EmailForm";
+import { useLocalStorage } from "@/utils/hooks/useLocalStorage";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { invoiceType } from "@/types/invoice";
 
 const EmailPage = () => {
   const [pdfBuffer, setPdfBuffer] = useState<string | null>(null);
   const [invoiceNumber, setInvoiceNumber] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useLocalStorage<typeof invoiceType[]>("invoice", []);
   const params = useParams();
   const id = params?.id as string;
 
   useEffect(() => {
     async function buffer() {
-      try {
-        const response = await fetch(`/api/generate_pdf?id=${id}`);
-        if (response.ok) {
-          const { base64, iNumber } = await response.json();
-          setInvoiceNumber(iNumber);
-          setPdfBuffer(base64);
-          setError(null);
-        } else {
+      if (id === "invoice") {
+        console.log(data[0]);
+        const localInvoice = data[0];
+        if (!localInvoice) {
+          setError("No invoice data in local storage");
+          return;
+        };
+        const response = await fetch("/api/generate_pdf", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ invoiceData: localInvoice }),
+        });
+        if (!response.ok) {
           setError(response.statusText);
+          return;
+        };
+        const { base64 } = await response.json();
+        setPdfBuffer(base64);
+        setInvoiceNumber(localInvoice.invoiceNumber!);
+        setError(null);
+      } else {
+        try {
+          const response = await fetch(`/api/generate_pdf?id=${id}`);
+          if (response.ok) {
+            const { base64, iNumber } = await response.json();
+            setInvoiceNumber(iNumber);
+            setPdfBuffer(base64);
+            setError(null);
+          } else {
+            setError(response.statusText);
+          }
+        } catch (e: unknown) {
+          setError("Error fetching PDF");
         }
-      } catch (e: unknown) {
-        setError("Error fetching PDF");
       }
-
     };
     buffer();
   }, [id]);

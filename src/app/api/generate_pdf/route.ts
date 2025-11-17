@@ -35,4 +35,18 @@ export async function GET(req: Request) {
     console.error("❌ PDF generation error:", e);
     return NextResponse.json({ message: "Internal error" }, { status: 500 });
   }
+};
+
+export async function POST(req: Request) {
+  const body = await req.json();
+  const localInvoice = body.invoiceData;
+  try {
+    const buff = await generatePdfBuffer(localInvoice);
+    const base64 = buff.toString("base64");
+    
+    return NextResponse.json({ base64 }, { status: 200 });
+  } catch (e: unknown) {
+    console.error("❌ PDF generation error:", e);
+    return NextResponse.json({ message: "Internal error" }, { status: 500 });
+  }
 }

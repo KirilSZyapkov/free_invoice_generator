@@ -1,7 +1,7 @@
 import { generateInvoicePDF } from "./generateInvoicePDF";
 import { Invoice } from "@prisma/client";
 
-export const generatePdfBuffer = async (invoice: Invoice) => {
+export const generatePdfBuffer = async (invoice: Partial<Invoice>) => {
   const pdfDoc = await generateInvoicePDF(invoice);
   const chunks: Uint8Array[] = [];
   const pdfBuffer = new Promise<Buffer>((resolve, reject) => {
