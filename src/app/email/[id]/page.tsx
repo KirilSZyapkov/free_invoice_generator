@@ -4,13 +4,13 @@ import EmailForm from "@/components/forms/EmailForm";
 import { useLocalStorage } from "@/utils/hooks/useLocalStorage";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { invoiceType } from "@/types/invoice";
+import { InvoiceType } from "@/types/invoice";
 
 const EmailPage = () => {
   const [pdfBuffer, setPdfBuffer] = useState<string | null>(null);
   const [invoiceNumber, setInvoiceNumber] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const [data, setData] = useLocalStorage<typeof invoiceType[]>("invoice", []);
+  const [data] = useLocalStorage<InvoiceType[]>("invoice", []);
   const params = useParams();
   const id = params?.id as string;
 

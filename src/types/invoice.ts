@@ -17,4 +17,6 @@ export const invoiceType = z.object({
   tax: z.string().min(1, "Tax is required!"),
   shipping: z.string().optional(),
   terms: z.string().optional()
-})
+});
+
+export type InvoiceType = z.infer<typeof invoiceType>;
