@@ -18,7 +18,7 @@ const EmailPage = () => {
     async function buffer() {
       if (id === "invoice") {
         console.log(data[0]);
-        const localInvoice = data[0];
+        const localInvoice = data[0].value;
         if (!localInvoice) {
           setError("No invoice data in local storage");
           return;
