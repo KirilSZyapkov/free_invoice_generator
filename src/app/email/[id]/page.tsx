@@ -23,7 +23,7 @@ const EmailPage = () => {
           setError("No invoice data in local storage");
           return;
         };
-        const response = await fetch("/api/generate_pdf", {
+        const response = await fetch("/api/pdf/generate", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

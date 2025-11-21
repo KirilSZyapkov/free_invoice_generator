@@ -1,5 +1,6 @@
 import fs from "fs";
 import express from "express";
+import bodyParser from "body-parser";
 import next from "next";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -30,10 +31,12 @@ app.prepare().then(() => {
   }
   const server = express();
 
-  server.use("/api/pdf", pdfRouter);
   server.use(cors());
   server.use(express.json());
+  server.use(express.urlencoded({ extended: true }));
   server.use(clerkMiddleware());
+  
+  server.use("/api/pdf", pdfRouter);
 
   server.use(
     "/api/trpc",
