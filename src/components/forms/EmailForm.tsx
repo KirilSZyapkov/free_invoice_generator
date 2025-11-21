@@ -12,6 +12,8 @@ import {
   FormField,
   FormItem,
 } from "@/components/ui/form";
+import { trpc } from "@/utils/trpc";
+import { toast } from "sonner";
 
 type Props = {
   base64: string,
@@ -26,7 +28,17 @@ type FormValues = {
 
 const EmailForm = ({ base64, invoiceNumber }: Props) => {
   const [sending, setSending] = useState(false);
-
+  const sendEmail = trpc.email.sendImails.useMutation({
+    onSuccess: async () => {
+      toast.success("✅ Invoice created successfully!");
+      form.reset();
+    },
+    onError: (error) => {
+      console.error("❌ Error sending invoice:", error);
+      toast.error("Something went wrong while sending the invoice.");
+    },
+    onSettled: () => setSending(false)
+  });
   const form = useForm<FormValues>({
     defaultValues: {
       to: "",
@@ -36,12 +48,21 @@ const EmailForm = ({ base64, invoiceNumber }: Props) => {
   });
 
   const onSubmit = async (values: FormValues) => {
+    if (!base64) {
+      console.error("❌ No PDF data to send.");
+      return;
+    };
+    if (!values.to) {
+      toast.error("Please provide a recipient email address.");
+      return;
+    };
     setSending(true);
     try {
-      // Replace this with your TRPC mutation or API call.
-      // Example: await trpc.email.send.mutate({ ...values, base64 });
-      console.log("Email payload:", { ...values, base64 });
-      // optionally show a UI toast/notification here
+      await sendEmail.mutateAsync({
+        to: values.to,
+        pdfBase64: base64,
+        invoiceNumber
+      });
     } catch (err) {
       console.error("Send failed", err);
     } finally {

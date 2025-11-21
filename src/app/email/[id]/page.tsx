@@ -6,11 +6,16 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { InvoiceType } from "@/types/invoice";
 
+type T = {
+  value: InvoiceType;
+  timeStamp: number;
+}
+
 const EmailPage = () => {
   const [pdfBuffer, setPdfBuffer] = useState<string | null>(null);
   const [invoiceNumber, setInvoiceNumber] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const [data] = useLocalStorage<InvoiceType[]>("invoice", []);
+  const [data] = useLocalStorage<T[]>("invoice", []);
   const params = useParams();
   const id = params?.id as string;
 

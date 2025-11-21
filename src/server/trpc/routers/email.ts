@@ -9,10 +9,8 @@ export const emailRouter = router({
       pdfBase64: z.string().min(1),
       invoiceNumber: z.string().min(1)
     }))
-    .query(async ({ ctx, input }) => {
-      const to: string = input.to;
-      const pdfBase64: string = input.pdfBase64;
-      const invoiceNumber: string = input.invoiceNumber;
+    .mutation(async ({ ctx, input }) => {
+      const { to, pdfBase64, invoiceNumber } = input;
 
       try {
         await sendInvoiceEmail(to, pdfBase64, invoiceNumber)
