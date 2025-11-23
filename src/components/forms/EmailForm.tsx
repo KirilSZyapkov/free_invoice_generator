@@ -61,7 +61,9 @@ const EmailForm = ({ base64, invoiceNumber }: Props) => {
       await sendEmail.mutateAsync({
         to: values.to,
         pdfBase64: base64,
-        invoiceNumber
+        invoiceNumber,
+        subject: values.subject,
+        message: values.message
       });
     } catch (err) {
       console.error("Send failed", err);
@@ -130,9 +132,10 @@ const EmailForm = ({ base64, invoiceNumber }: Props) => {
             <div className="text-sm text-muted-foreground">
               Invoice: <span className="font-medium">{invoiceNumber}</span>
             </div>
-            <Button type="submit" disabled={sending}>
+            {/* <Button type="submit" disabled={sending}>
               {sending ? "Sending..." : "Send Email"}
-            </Button>
+            </Button> */}
+            <div className="font-semibold text-red-500 underline">Due to technical problems Sending Emails is disabled!</div>
           </div>
         </form>
       </Form>

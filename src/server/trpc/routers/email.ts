@@ -7,13 +7,15 @@ export const emailRouter = router({
     .input(z.object({
       to: z.string().min(1),
       pdfBase64: z.string().min(1),
-      invoiceNumber: z.string().min(1)
+      invoiceNumber: z.string().min(1),
+      subject: z.string().min(1),
+      message: z.string().min(1),
     }))
     .mutation(async ({ ctx, input }) => {
-      const { to, pdfBase64, invoiceNumber } = input;
+      const { to, pdfBase64, invoiceNumber, message, subject } = input;
 
       try {
-        await sendInvoiceEmail(to, pdfBase64, invoiceNumber)
+        await sendInvoiceEmail(to, pdfBase64, invoiceNumber, message, subject)
         return { uccess: true }
       } catch (e) {
         console.error("❌ Email error:", e);
