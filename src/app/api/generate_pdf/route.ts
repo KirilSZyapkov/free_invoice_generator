@@ -1,10 +1,6 @@
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-console.log("=== route loaded ===");
-console.log("NEXT_RUNTIME:", process.env.NEXT_RUNTIME);
-console.log("NODE version:", process.version);
-
 import { db } from "@/server/db/prisma";
 import { generatePdfBuffer } from "@/server/utils/pdfBuffer";
 import { NextResponse } from "next/server";
@@ -19,7 +15,7 @@ export async function GET(req: Request) {
 
   try {
     const invoice = await db.invoice.findUnique({ where: { id: id } });
-    console.log("api/generate_pdf", invoice);
+   
 
     if (!invoice) {
       console.error("Invoice not found for id:", id);

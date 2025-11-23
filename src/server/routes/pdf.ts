@@ -39,7 +39,6 @@ pdfRouter.get("/:invoiceId", async (req, res) => {
 pdfRouter.post("/generate", async (req, res) => {
   try {
     const localInvoice = req.body.invoiceData; // очакваме клиент да прати invoice JSON
-    console.log("server/routes/pdf 42", localInvoice);
     // генерираме Buffer
     const buffer = await generatePdfBuffer(localInvoice); // ensure this is server-side function
     const base64 = buffer.toString("base64");
