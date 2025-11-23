@@ -197,7 +197,7 @@ export default function HelpPage() {
             <section className="bg-primary/5 rounded-lg p-6 text-center">
               <h2 className="text-xl font-semibold mb-4">Need More Help?</h2>
               <p className="text-muted-foreground mb-4">
-                Can't find what you're looking for? We're here to help.
+                Can&apos;t find what you&apos;re looking for? We&apos;re here to help.
               </p>
               <Button variant="default">Contact Support</Button>
             </section>

@@ -110,7 +110,7 @@ const EmailPage = () => {
             <div className="sticky top-6">
               <div className="bg-white/90 dark:bg-slate-900 rounded-2xl shadow-md border border-slate-100 dark:border-slate-700 p-6">
                 <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">Email Details</h2>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">Fill in the recipient's details and send the invoice.</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">Fill in the recipient&apos;s details and send the invoice.</p>
 
                 <EmailForm base64={pdfBuffer} invoiceNumber={invoiceNumber} />
               </div>
