@@ -1,3 +1,7 @@
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const preferredRegion = "iad1"; // Optional: бърза US-East
+
 import PDFDocument from "pdfkit";
 import { Invoice } from "@prisma/client";
 import path from "path";
