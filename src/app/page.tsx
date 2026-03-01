@@ -94,7 +94,7 @@ const HomePage = () => {
       {/* Footer / Sync */}
       <footer className="mt-20 text-center text-gray-500 text-sm">
         <p className="mt-4">
-          © {new Date().getFullYear()} Free Invoice Generator — Built with ❤️ using Next.js & Clerk.
+          © {new Date().getFullYear()} Free Invoice Generator
         </p>
       </footer>
     </main>

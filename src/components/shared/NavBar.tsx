@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export const NavBar = () => {
   const [open, setOpen] = useState(false);
-  const { user } = useUser();
+  const { user, isSignedIn } = useUser();
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md shadow-sm">
@@ -28,6 +28,14 @@ export const NavBar = () => {
           >
             Create Invoice
           </Link>
+          {!isSignedIn && (
+             <Link
+            href="/invoice"
+            className="text-gray-700 hover:text-blue-600 transition-colors"
+          >
+            Invoice
+          </Link>
+          )}
           <Link
             href="/help"
             className="text-gray-700 hover:text-blue-600 transition-colors"
