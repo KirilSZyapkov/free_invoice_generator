@@ -36,7 +36,7 @@ const HomePage = () => {
           transition={{ delay: 0.4 }}
           className="flex flex-col sm:flex-row justify-center gap-4 mt-6"
         >
-          <Link href="/invoice">
+          <Link href="/new_invoice">
             <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl cursor-pointer">
               Create Invoice <ArrowRight className="ml-2 h-5 w-5" />
             </Button>

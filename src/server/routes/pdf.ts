@@ -26,7 +26,8 @@ pdfRouter.get("/:invoiceId", async (req, res) => {
     const doc = await generateInvoicePDF(invoice);
 
     doc.pipe(res);
-  
+    doc.end();
+	  
   } catch (error: unknown) {
     console.error("❌ Error generating PDF:", error);
     if (!res.headersSent) {
